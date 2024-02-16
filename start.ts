@@ -1,12 +1,7 @@
 import {
-  attestedEventSignature,
   getAndUpdateAllRelevantLogs,
   provider,
-  registeredEventSignatureV1,
-  registeredEventSignatureV2,
-  revokedEventSignature,
-  revokedOffchainEventSignature,
-  timestampEventSignature,
+  registeredEventSignature,
 } from "./utils";
 import { startGraph } from "./graph";
 import { ethers } from "ethers";
@@ -54,12 +49,7 @@ async function go() {
 const filter = {
   topics: [
     [
-      ethers.utils.id(registeredEventSignatureV1),
-      ethers.utils.id(registeredEventSignatureV2),
-      ethers.utils.id(attestedEventSignature),
-      ethers.utils.id(revokedEventSignature),
-      ethers.utils.id(timestampEventSignature),
-      ethers.utils.id(revokedOffchainEventSignature),
+      ethers.utils.id(registeredEventSignature),
     ],
   ],
 };

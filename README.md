@@ -126,3 +126,12 @@ yarn remove @prisma/client prisma
 yarn add @prisma/client@latest prisma@latest
 npx prisma generate
 ```
+
+
+Steps: 
+- [ ] update prisma schema
+- [ ] remove unecessary chain configurations
+- [ ] update chain ID to base-sepolia
+- [ ] update .env.template
+- [ ] modify ts config to accept single quotes
+- [ ] modify topics for events to just accept the event for registered node emissions
