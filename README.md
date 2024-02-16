@@ -77,5 +77,52 @@ add a `.yarnrc.yml` file to the root of the project with the following contents:
 nodeLinker: node-modules
 ```
 
+# Notes
+There is a general conflict here. Specifically, the docker container does not run properly when using prisma 4.13.0. However, in order to get the project working, we have to generate the graphQL types and resolvers. In order to generate these types, we are supposed to include this in our `prisma.schema` file:
 
+```ts
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+```
 
+But then docker does not run. In order to get the docker container to run and the server to start, we need to upgrade to the latest version of prisma.
+
+The interim solution:
+
+**Step 1:** 
+```ts
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../graphql/type-graphql"
+}
+```
+
+downgrade and generate the types by running npx prisma generate.
+
+```bash
+yarn remove @prisma/client prisma
+yarn add @prisma/client@4.13 prisma@4.13
+npx prisma generate
+```
+
+You should see the generated types in your `../graphql/type-graphql` filepath.
+
+**Step 2:** 
+Remove or comment the typegraphql in `prisma.schema` 
+```ts
+/*
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../graphql/type-graphql"
+}
+*/
+```
+
+upgrade to the latest prisma by running npx prisma generate.
+
+```bash
+yarn remove @prisma/client prisma
+yarn add @prisma/client@latest prisma@latest
+npx prisma generate
+```

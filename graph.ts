@@ -3,7 +3,7 @@ import {
   resolvers,
   applyResolversEnhanceMap,
   ResolversEnhanceMap,
-} from "@generated/type-graphql";
+} from "./graphql/type-graphql";
 import { AuthChecker, Authorized, buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server";
 import { prisma } from "./db.server";
