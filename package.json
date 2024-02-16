@@ -6,32 +6,36 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "typechain --target ethers-v5 ./abis/*.json",
-    "start": "ts-node start.ts"
+    "start": "ts-node start.ts",
+    "prisma:generate": "npx prisma generate",
+    "docker:rebuild": "docker-compose build && docker-compose up -d",
+    "docker:db": "docker-compose -f docker-compose.db.yml up -d",
+    "compose:down": "docker-compose down --volumes"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ethereum-attestation-service/eas-sdk": "0.28.2",
-    "@prisma/client": "4.13.0",
+    "@ethereum-attestation-service/eas-sdk": "1.4.2",
+    "@prisma/client": "5.9.1",
+    "@typechain/ethers-v5": "^11.1.2",
     "apollo-server": "^3.12.0",
     "class-validator": "^0.14.0",
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.3",
-    "ethers": "^5.7.2",
-    "graphql": "^15.8.0",
+    "ethers": "^6.11.1",
+    "graphql": "^16.8.1",
     "graphql-fields": "^2.0.3",
-    "p-limit": "^3.0.2",
-    "prisma": "^4.13.0",
-    "reflect-metadata": "^0.1.13",
+    "p-limit": "^5.0.0",
+    "prisma": "5.9.1",
+    "reflect-metadata": "^0.2.1",
     "ts-node": "^10.9.1",
     "type-graphql": "^1.1.1",
-    "typegraphql-prisma": "^0.24.7",
-    "typescript": "^4.8.4",
     "typechain": "^8.1.0",
-    "@typechain/ethers-v5": "^10.1.0"
+    "typegraphql-prisma": "^0.27.1",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@types/node": "^18.8.4"
+    "@types/node": "^20.11.19"
   }
 }

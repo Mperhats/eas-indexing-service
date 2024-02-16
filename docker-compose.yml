@@ -1,28 +1,50 @@
-version: "3.9"
-
+version: '3'
 services:
-  eas-postgres:
-    image: postgres:latest
-    container_name: eas-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgresPassword
-      POSTGRES_DB: eas-index
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  server:
+    build:
+      context: .
+      args:
+        NPM_LOG_LEVEL: notice
     ports:
-      - "5432"
-
-  eas-indexer:
-    build: .
-    container_name: eas_indexer_container
+      - ${PORT}:3000
     environment:
-      CHAIN_ID: ${CHAIN_ID}
-      DATABASE_URL: "postgresql://postgres:postgresPassword@eas-postgres:5432/eas-index"
+      BCRYPT_SALT: ${BCRYPT_SALT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      DB_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
     depends_on:
-      - eas-postgres
+      - migrate
+  migrate:
+    build:
+      context: .
+      args:
+        NPM_LOG_LEVEL: notice
+    command: npm run db:init
+    working_dir: /app/server
+    environment:
+      BCRYPT_SALT: ${BCRYPT_SALT}
+      DB_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    container_name: ${CONTAINER_NAME}
+    image: postgis/postgis:14-3.2
     ports:
-      - "4000:4000"
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      timeout: 45s
+      interval: 10s
+      retries: 10
 
 volumes:
-  postgres_data:
+  postgres: ~
