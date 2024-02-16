@@ -1,10 +1,7 @@
-export { AttestationScalarFieldEnum } from "./AttestationScalarFieldEnum";
-export { EnsNameScalarFieldEnum } from "./EnsNameScalarFieldEnum";
-export { OffchainRevocationScalarFieldEnum } from "./OffchainRevocationScalarFieldEnum";
+export { NodeEntryScalarFieldEnum } from "./NodeEntryScalarFieldEnum";
+export { NodeStatus } from "./NodeStatus";
+export { NodeType } from "./NodeType";
 export { QueryMode } from "./QueryMode";
-export { SchemaNameScalarFieldEnum } from "./SchemaNameScalarFieldEnum";
-export { SchemaScalarFieldEnum } from "./SchemaScalarFieldEnum";
 export { ServiceStatScalarFieldEnum } from "./ServiceStatScalarFieldEnum";
 export { SortOrder } from "./SortOrder";
-export { TimestampScalarFieldEnum } from "./TimestampScalarFieldEnum";
 export { TransactionIsolationLevel } from "./TransactionIsolationLevel";

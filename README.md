@@ -83,6 +83,7 @@ There is a general conflict here. Specifically, the docker container does not ru
 ```ts
 generator typegraphql {
   provider = "typegraphql-prisma"
+  output   = "../graphql/type-graphql"
 }
 ```
 
@@ -127,7 +128,6 @@ yarn add @prisma/client@latest prisma@latest
 npx prisma generate
 ```
 
-
 Steps: 
 - [ ] update prisma schema
 - [ ] remove unecessary chain configurations
@@ -135,3 +135,5 @@ Steps:
 - [ ] update .env.template
 - [ ] modify ts config to accept single quotes
 - [ ] modify topics for events to just accept the event for registered node emissions
+- [ ] need to update the emission event to just emit raw values so that I can index the registration emission logs and store them
+- [ ] need to update the unit test in the monorepo.
