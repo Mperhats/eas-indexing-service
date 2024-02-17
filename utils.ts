@@ -111,15 +111,13 @@ export async function getAndUpdateAllRelevantLogs() {
   let currentBlock = fromBlock + 1;
   const latestBlock = await provider.getBlockNumber();
 
-  console.error('latestBlock:',latestBlock);
-
   while (currentBlock <= latestBlock) {
     const toBlock = Math.min(currentBlock + batchSize - 1, latestBlock);
 
     const nodeEntries = await fetchAndParseRegisteredEvents(currentBlock, toBlock);
 
-    for (const log of nodeEntries) {
-      await processRegisteredNode(log);
+    for (const node of nodeEntries) {
+      await processRegisteredNode(node);
       await timeout(requestDelay);
     }
 
@@ -132,17 +130,36 @@ export async function getAndUpdateAllRelevantLogs() {
 }
 
 // Example processing function for 'Registered' logs
-async function processRegisteredNode(log: NodeEntry) {
-  // Decode log data (this requires knowing the data structure)
-  console.log("Processing 'Registered' log:", JSON.stringify(log));
-
-  // You'll need to adapt this part to match the data structure of your event
-  // This includes decoding the log data and then updating the database
+async function processRegisteredNode(node: NodeEntry) {
+  console.log("Processing 'Registered' log:", JSON.stringify(node));
+  try {
+    await prisma.nodeEntry.create({ data: node });
+  } catch (error) {
+    console.error("Error registering node:", error);
+  }
 }
 
-// Update or get service stat for block tracking
-async function updateServiceStatToLastBlock(shouldCreate: boolean, propertyName: string, lastBlock: number) {
-  // Similar to the previously defined function, adapted for the current logic
+export async function updateServiceStatToLastBlock(
+  shouldCreate: boolean,
+  serviceStatPropertyName: string,
+  lastBlock: number
+) {
+  const existing = await prisma.serviceStat.findFirst({
+    where: { name: serviceStatPropertyName },
+  });
+
+  if (!existing || shouldCreate) {
+    await prisma.serviceStat.create({
+      data: { name: serviceStatPropertyName, value: lastBlock.toString() },
+    });
+  } else {
+    if (lastBlock !== 0) {
+      await prisma.serviceStat.update({
+        where: { name: serviceStatPropertyName },
+        data: { value: lastBlock.toString() },
+      });
+    }
+  }
 }
 
 async function getStartData(serviceStatPropertyName: string) {

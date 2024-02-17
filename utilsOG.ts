@@ -725,6 +725,7 @@ export async function getAndUpdateAllRelevantLogs() {
       await timeout(requestDelay);
     }
 
+    
     await updateServiceStatToLastBlock(false, serviceStatPropertyName, toBlock);
 
     currentBlock += batchSize;
