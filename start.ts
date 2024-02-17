@@ -1,10 +1,11 @@
 import {
+  contractAddress,
   getAndUpdateAllRelevantLogs,
   provider,
-  registeredEventSignature,
 } from "./utils";
 import { startGraph } from "./graph";
 import { ethers } from "ethers";
+import { NodeRegistry__factory } from "./typechain-types";
 
 require("dotenv").config();
 
@@ -16,6 +17,9 @@ const POLLING_INTERVAL = process.env.POLLING_INTERVAL
   : 60000;
 
 const DISABLE_LISTENER = process.env.DISABLE_LISTENER;
+
+const nodeRegistry = NodeRegistry__factory.connect(contractAddress, provider);
+
 
 export async function update() {
   if (running) {
@@ -46,16 +50,18 @@ async function go() {
   setGoTimeout();
 }
 
+const eventTopicHash = nodeRegistry.getEvent("Registered").fragment.topicHash;
+
 const filter = {
   topics: [
     [
-      ethers.utils.id(registeredEventSignature),
+      eventTopicHash
     ],
   ],
 };
 
 if (!DISABLE_LISTENER) {
-  provider.on(filter, async (log: ethers.providers.Log) => {
+  provider.on(filter, async (log: ethers.Log) => {
     go();
   });
 }
