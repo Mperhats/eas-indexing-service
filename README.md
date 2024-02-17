@@ -135,5 +135,5 @@ Steps:
 - [ ] update .env.template
 - [ ] modify ts config to accept single quotes
 - [ ] modify topics for events to just accept the event for registered node emissions
-- [ ] need to update the emission event to just emit raw values so that I can index the registration emission logs and store them
-- [ ] need to update the unit test in the monorepo.
+- [ ] need to get error codes emitted properly from the contract and handled by the SDK. For example, registering the same node twice fails but the error does not provide any useful information.
+

@@ -31,7 +31,7 @@ export const EAS_CHAIN_CONFIGS: EASChainConfig[] = [
     subdomain: "base-sepolia.",
     version: "1.2.0",
     contractAddress: "0x56e3B524302Ec60Ec7850aF492D079367E03e5fb",
-    contractStartBlock: 5261500,
+    contractStartBlock: 5789190,
     etherscanURL: "https://sepolia.basescan.org/",
     rpcProvider: `https://sepolia.base.org`,
   },
@@ -52,8 +52,9 @@ export const provider = new ethers.providers.StaticJsonRpcProvider(
 );
 
 
-// Assuming you have already defined this based on your contract's event
+
 export const registeredEventSignature = ethers.utils.id("Registered(bytes32,address)");
+
 export const CONTRACT_START_BLOCK = activeChainConfig.contractStartBlock;
 
 // Timeout Promise
@@ -81,7 +82,7 @@ export async function getAndUpdateAllRelevantLogs() {
       topics: [registeredEventSignature],
     });
 
-    console.log('registered logs',registeredLogs)
+    console.log('registered logs',JSON.stringify(registeredLogs))
 
     for (const log of registeredLogs) {
       await processRegisteredLog(log);
@@ -99,7 +100,7 @@ export async function getAndUpdateAllRelevantLogs() {
 // Example processing function for 'Registered' logs
 async function processRegisteredLog(log: ethers.providers.Log) {
   // Decode log data (this requires knowing the data structure)
-  console.log("Processing 'Registered' log:", log);
+  console.log("Processing 'Registered' log:", JSON.stringify(log));
 
   // You'll need to adapt this part to match the data structure of your event
   // This includes decoding the log data and then updating the database
